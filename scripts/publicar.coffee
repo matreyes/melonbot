@@ -10,7 +10,7 @@
 
 module.exports = (robot) ->
 
-  robot.hear /publicar (.*) en (.*)/i, (res) ->
+  robot.hear /^publicar (.*) en (.*)/i, (res) ->
     key = process.env.KEY
     if (key?)
       # res.send "#{res.match[1]} #{res.match[2]} #{key}"
@@ -22,7 +22,9 @@ module.exports = (robot) ->
       robot.http("http://productos.meloncargo.com/api/melis/publish")
         .header('Content-Type', 'application/json')
         .post(data) (err, response, body) ->
-          res.send body
+          pbody = JSON.parse body
+          res.send pbody.url
+          res.send "Actualizar: https://vender.mercadolibre.cl/item/update?itemId=#{pbody.id}"
 
     else
       res.send "No se ingresó el token (KEY)"
