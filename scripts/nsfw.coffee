@@ -11,12 +11,15 @@
 module.exports = (robot) ->
 
   robot.hear /nsfw/i, (res) ->
-    res.http('http://titsnarse.co.uk/random_json.php')
+    if(res.envelope.room=="prueba")
+      res.http('http://titsnarse.co.uk/random_json.php')
         .get() (error, response, body) ->
-          # passes back the image source
+            # passes back the image source
           res.send 'http://titsnarse.co.uk'+JSON.parse(body).src
+    else
+      res.send 'En Meloncargo trabajamos seguros'
 
-          
+
   # robot.respond /open the (.*) doors/i, (res) ->
   #   doorType = res.match[1]
   #   if doorType is "pod bay"

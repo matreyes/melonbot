@@ -1,5 +1,7 @@
 # Description:
-#   Example scripts for you to examine and try out.
+#   publicar <asin> en <category_meli>
+#   categoría de <url_meli>
+#   donde meto un <nombre_del_producto>
 #
 # Notes:
 #   They are commented out by default, because most of them are pretty silly and
@@ -21,13 +23,32 @@ module.exports = (robot) ->
       })
       robot.http("http://productos.meloncargo.com/api/melis/publish")
         .header('Content-Type', 'application/json')
-        .post(data) (err, response, body) ->
+        .post(data) (err, _, body) ->
           pbody = JSON.parse body
           res.send pbody.url
           res.send "Actualizar: https://vender.mercadolibre.cl/item/update?itemId=#{pbody.id}"
 
     else
       res.send "No se ingresó el token (KEY)"
+
+  robot.hear /^categor[í|i]a de (.*)/i, (res) ->
+    mlc_id = /MLC-(\d+)-/i.exec(res.match[1])[1]
+    mlc_id = "MLC#{mlc_id}"
+    robot.http("https://api.mercadolibre.com/items?ids=#{mlc_id}&attributes=category_id")
+      .get() (err, _, body) ->
+        pbody = JSON.parse body
+        res.send pbody[0].category_id
+
+  robot.hear /^donde meto un (.*)/i, (res) ->
+    data = JSON.stringify([{
+      title: res.match[1]
+    }])
+    robot.http("https://api.mercadolibre.com/sites/MLC/category_predictor/predict")
+      .header('Content-Type', 'application/json')
+      .post(data) (err, _, body) ->
+        pbody = JSON.parse(body)[0]
+        tree = pbody.path_from_root.map( (x) -> x.name ).join(" > ")
+        res.send "#{pbody.id} #{tree}"
 
   # robot.respond /open the (.*) doors/i, (res) ->
   #   doorType = res.match[1]
