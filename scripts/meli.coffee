@@ -39,9 +39,9 @@ module.exports = (robot) ->
         pbody = JSON.parse body
         res.send pbody[0].category_id
 
-  robot.hear /^donde meto [un|una|unos|unas] (.*)/i, (res) ->
+  robot.hear /^donde meto (un|una|unos|unas) (.*)/i, (res) ->
     data = JSON.stringify([{
-      title: res.match[1]
+      title: res.match.pop()
     }])
 
     robot.http("https://api.mercadolibre.com/sites/MLC/category_predictor/predict")
