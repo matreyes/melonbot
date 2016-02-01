@@ -1,14 +1,9 @@
-# Description:
+
+#
+# Commands:
 #   publicar <asin> en <category_meli>
 #   categoría de <url_meli>
-#   donde meto un <nombre_del_producto>
-#
-# Notes:
-#   They are commented out by default, because most of them are pretty silly and
-#   wouldn't be useful and amusing enough for day to day huboting.
-#   Uncomment the ones you want to try and experiment with.
-#
-#   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
+#   donde meto <un/una> <nombre_del_producto> - predice categoría
 
 module.exports = (robot) ->
 

@@ -1,12 +1,8 @@
-# Description:
-#   Example scripts for you to examine and try out.
-#
-# Notes:
-#   They are commented out by default, because most of them are pretty silly and
-#   wouldn't be useful and amusing enough for day to day huboting.
-#   Uncomment the ones you want to try and experiment with.
-#
-#   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
+# Commands:
+#   bug -> entrega una excusa, no es mi culpa!
+#   nsfw -> Cuando algo no es seguro para trabajar, no es seguro para trabajar
+
+
 
 module.exports = (robot) ->
 
@@ -14,11 +10,14 @@ module.exports = (robot) ->
     if(res.envelope.room=="prueba")
       res.http('http://titsnarse.co.uk/random_json.php')
         .get() (error, response, body) ->
-            # passes back the image source
           res.send 'http://titsnarse.co.uk'+JSON.parse(body).src
     else
       res.send 'En Meloncargo trabajamos seguros'
 
+  robot.hear /bug/i, (res) ->
+    res.http('https://api.githunt.io/programmingexcuses')
+      .get() (error, _, body) ->
+        res.send body
 
   # robot.respond /open the (.*) doors/i, (res) ->
   #   doorType = res.match[1]
