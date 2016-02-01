@@ -39,16 +39,20 @@ module.exports = (robot) ->
         pbody = JSON.parse body
         res.send pbody[0].category_id
 
-  robot.hear /^donde meto un (.*)/i, (res) ->
+  robot.hear /^donde meto [un|una|unos|unas] (.*)/i, (res) ->
     data = JSON.stringify([{
       title: res.match[1]
     }])
+
     robot.http("https://api.mercadolibre.com/sites/MLC/category_predictor/predict")
       .header('Content-Type', 'application/json')
       .post(data) (err, _, body) ->
         pbody = JSON.parse(body)[0]
         tree = pbody.path_from_root.map( (x) -> x.name ).join(" > ")
-        res.send "#{pbody.id} #{tree}"
+        if(Math.random() < 0.1)
+          res.send "Mételo por: #{pbody.id} #{tree}"
+        else
+          res.send "#{pbody.id} #{tree}"
 
   # robot.respond /open the (.*) doors/i, (res) ->
   #   doorType = res.match[1]
