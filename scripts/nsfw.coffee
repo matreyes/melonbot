@@ -13,6 +13,7 @@ module.exports = (robot) ->
       res.send 'En Meloncargo trabajamos seguros'
 
   robot.hear /bug/i, (res) ->
-    res.http('https://api.githunt.io/programmingexcuses')
-      .get() (error, _, body) ->
-        res.send body
+#    res.http('https://api.githunt.io/programmingexcuses')
+#      .get() (error, _, body) ->
+#        res.send body
+    res.send "Me importa un carajo"

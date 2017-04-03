@@ -14,13 +14,18 @@ module.exports = (robot) ->
         category: res.match[2],
         key: key
       })
+
       robot.http("http://productos.meloncargo.com/api/melis/publish")
         .header('Content-Type', 'application/json')
-        .post(data) (err, _, body) ->
+        .post(data) (err, response, body) ->
+          if err
+            res.send "Hay algo mal aquí!"
+            return
+          if response.statusCode isnt 200
+            res.send "Quokka me respondió con un error :cry:"
+            return
           pbody = JSON.parse body
           res.send pbody.url
-
-          res.send "Actualizar: https://vender.mercadolibre.cl/item/update?itemId=#{pbody.id}" if pbody.id != ""
 
     else
       res.send "No se ingresó el token (KEY)"
@@ -29,10 +34,22 @@ module.exports = (robot) ->
     mlc_id = /MLC-(\d+)-/i.exec(res.match[1])[1]
     mlc_id = "MLC#{mlc_id}"
     robot.http("https://api.mercadolibre.com/items?ids=#{mlc_id}&attributes=category_id")
-      .get() (err, _, body) ->
+      .get() (err, response, body) ->
+        if err
+          res.send "Hay algo mal aquí!"
+          return
+        if response.statusCode isnt 200
+          res.send "MeLi me respondió con un error :("
+          return
         pbody = JSON.parse body
         robot.http("https://api.mercadolibre.com/categories/#{pbody[0].category_id}")
-          .get() (err, _, body2) ->
+          .get() (err, response, body2) ->
+            if err
+              res.send "Hay algo mal aquí!"
+              return
+            if response.statusCode isnt 200
+              res.send "MeLi me respondió con un error :("
+              return
             pbody2 = JSON.parse body2
             tree = pbody2.path_from_root.map( (x) -> x.name ).join(" > ")
             res.send "#{pbody2.id} #{tree}"
@@ -44,7 +61,13 @@ module.exports = (robot) ->
 
     robot.http("https://api.mercadolibre.com/sites/MLC/category_predictor/predict")
       .header('Content-Type', 'application/json')
-      .post(data) (err, _, body) ->
+      .post(data) (err, response, body) ->
+        if err
+          res.send "Hay algo mal aquí!"
+          return
+        if response.statusCode isnt 200
+          res.send "MeLi me respondió con un error :cry:"
+          return
         pbody = JSON.parse(body)[0]
         tree = pbody.path_from_root.map( (x) -> x.name ).join(" > ")
         if(Math.random() < 0.1)
