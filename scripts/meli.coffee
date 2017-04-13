@@ -31,8 +31,11 @@ module.exports = (robot) ->
       res.send "No se ingresó el token (KEY)"
 
   robot.hear /^categor[í|i]a de (.*)/i, (res) ->
-    mlc_id = /MLC-(\d+)-/i.exec(res.match[1])[1]
-    mlc_id = "MLC#{mlc_id}"
+    id = /MLC-(\d+)-/i.exec(res.match[1])
+    if !id
+      res.send("Me parece que " + res.match[1] + " no es una dirección meli válida")
+      return
+    mlc_id = "MLC#{id[1]}"
     robot.http("https://api.mercadolibre.com/items?ids=#{mlc_id}&attributes=category_id")
       .get() (err, response, body) ->
         robot.logger.debug('CATEGORÍA: mlc_id-> ' + mlc_id + '\nerr->\t' + err + '\nstatusCode->\t' + response.statusCode + '\nbody->\t' + body)
