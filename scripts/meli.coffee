@@ -24,8 +24,8 @@ module.exports = (robot) ->
           if response.statusCode isnt 200
             res.send "Quokka me respondió con un error :cry:"
             return
-          pbody = JSON.parse body
-          res.send pbody.url
+          url = JSON.parse(body).url || 'No pude publicar ' + res.match[1] + ' en ' + res.match[2] + ' :sweat_smile:'
+          res.send url
 
     else
       res.send "No se ingresó el token (KEY)"
