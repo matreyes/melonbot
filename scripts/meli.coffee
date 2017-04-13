@@ -14,10 +14,10 @@ module.exports = (robot) ->
         category: res.match[2],
         key: key
       })
-
       robot.http("http://productos.meloncargo.com/api/melis/publish")
         .header('Content-Type', 'application/json')
         .post(data) (err, response, body) ->
+          robot.logger.debug('PUBLICAR: data-> ' + data + '\nerr->\t' + err + '\nstatusCode->\t' + response.statusCode + '\nbody->\t' + body)
           if err
             res.send "Hay algo mal aquí!"
             return
@@ -35,6 +35,7 @@ module.exports = (robot) ->
     mlc_id = "MLC#{mlc_id}"
     robot.http("https://api.mercadolibre.com/items?ids=#{mlc_id}&attributes=category_id")
       .get() (err, response, body) ->
+        robot.logger.debug('CATEGORÍA: mlc_id-> ' + mlc_id + '\nerr->\t' + err + '\nstatusCode->\t' + response.statusCode + '\nbody->\t' + body)
         if err
           res.send "Hay algo mal aquí!"
           return
@@ -44,6 +45,7 @@ module.exports = (robot) ->
         pbody = JSON.parse body
         robot.http("https://api.mercadolibre.com/categories/#{pbody[0].category_id}")
           .get() (err, response, body2) ->
+            robot.logger.debug('CATEGORÍA: body-> ' + body + '\nerr->\t' + err + '\nstatusCode->\t' + response.statusCode + '\nbody2->\t' + body2)
             if err
               res.send "Hay algo mal aquí!"
               return
@@ -62,6 +64,7 @@ module.exports = (robot) ->
     robot.http("https://api.mercadolibre.com/sites/MLC/category_predictor/predict")
       .header('Content-Type', 'application/json')
       .post(data) (err, response, body) ->
+        robot.logger.debug('DONDE METO: data-> ' + data + '\nerr->\t' + err + '\nstatusCode->\t' + response.statusCode + '\nbody->\t' + body)
         if err
           res.send "Hay algo mal aquí!"
           return
