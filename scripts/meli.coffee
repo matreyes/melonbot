@@ -5,7 +5,7 @@
 
 module.exports = (robot) ->
 
-  robot.hear /^publicar (.*) en (.*)/i, (res) ->
+  publicar = (res) ->
     key = process.env.KEY
     if (key?)
       # res.send "#{res.match[1]} #{res.match[2]} #{key}"
@@ -30,7 +30,10 @@ module.exports = (robot) ->
     else
       res.send "No se ingresó el token (KEY)"
 
-  robot.hear /^categor[í|i]a de (.*)/i, (res) ->
+  robot.hear /^publicar (.*) en (.*)/i, publicar
+  robot.hear /^p (.*) (.*)/i, publicar
+
+  categoria = (res) ->
     id = /MLC-(\d+)-/i.exec(res.match[1])
     if !id
       res.send("Me parece que " + res.match[1] + " no es una dirección meli válida")
@@ -59,7 +62,10 @@ module.exports = (robot) ->
             tree = pbody2.path_from_root.map( (x) -> x.name ).join(" > ")
             res.send "#{pbody2.id} #{tree}"
 
-  robot.hear /^donde meto (un|una|unos|unas) (.*)/i, (res) ->
+  robot.hear /^categor[í|i]a de (.*)/i, categoria
+  robot.hear /^c (.*)/i, categoria
+
+  dondeMeto = (res) ->
     data = JSON.stringify([{
       title: res.match.pop()
     }])
@@ -80,3 +86,6 @@ module.exports = (robot) ->
           res.send "Mételo por: #{pbody.id} #{tree}"
         else
           res.send "#{pbody.id} #{tree}"
+
+  robot.hear /^donde meto (un|una|unos|unas) (.*)/i, dondeMeto
+  robot.hear /^dm (.*)/i, dondeMeto
