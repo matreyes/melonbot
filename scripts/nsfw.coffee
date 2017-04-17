@@ -5,7 +5,6 @@
 module.exports = (robot) ->
 
   robot.hear /^nsfw/i, (res) ->
-    # res.send 'este es el canal [' + res.envelope.room + ']'
     allowed = ['prueba', 'socios', 'G0KAB6CRK']
     allowed.push('Shell') # Comentar para probar "else" en consola
     if(allowed.indexOf(res.envelope.room) > -1)
@@ -13,6 +12,7 @@ module.exports = (robot) ->
         .get() (error, response, body) ->
           res.send 'http://titsnarse.co.uk'+JSON.parse(body).src
     else
+      robot.logger.info('Trying to get NSFW from: [' + res.envelope.room + ']')
       res.send 'En Meloncargo trabajamos seguros'
 
   robot.hear /^sfw ?(.*)$/i, (res) ->
