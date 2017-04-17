@@ -12,6 +12,22 @@ module.exports = (robot) ->
     else
       res.send 'En Meloncargo trabajamos seguros'
 
+  robot.hear /^sfw ?(.*)$/i, (res) ->
+    param = res.match[1]
+    url = 'http://api.giphy.com/v1/gifs/'
+    if (param)
+      res.send "Déjame buscarte un memazo de " + param
+      res.http(url + 'search?api_key=dc6zaTOxFJmzC&limit=100&sort=relevant&q=' + param)
+        .get() (error, response, body) ->
+          results = JSON.parse(body).data
+          rand = results[Math.floor(Math.random() * results.length)]
+          res.send rand.images.original.url
+    else
+      res.send "Déjame buscarte un memazo random"
+      res.http(url + 'random?api_key=dc6zaTOxFJmzC')
+        .get() (error, response, body) ->
+          res.send JSON.parse(body).data.image_url
+
   robot.hear /bug/i, (res) ->
 #    res.http('https://api.githunt.io/programmingexcuses')
 #      .get() (error, _, body) ->
