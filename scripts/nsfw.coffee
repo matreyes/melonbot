@@ -4,7 +4,7 @@
 
 module.exports = (robot) ->
 
-  robot.hear /nsfw/i, (res) ->
+  robot.hear /^nsfw/i, (res) ->
     if(res.envelope.room=="prueba" || res.envelope.room=="socios")
       res.http('http://titsnarse.co.uk/random_json.php')
         .get() (error, response, body) ->
@@ -28,7 +28,7 @@ module.exports = (robot) ->
         .get() (error, response, body) ->
           res.send JSON.parse(body).data.image_url
 
-  robot.hear /bug/i, (res) ->
+  robot.hear /^bug/i, (res) ->
 #    res.http('https://api.githunt.io/programmingexcuses')
 #      .get() (error, _, body) ->
 #        res.send body
