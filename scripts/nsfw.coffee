@@ -23,8 +23,12 @@ module.exports = (robot) ->
       res.http(url + 'search?api_key=dc6zaTOxFJmzC&limit=100&sort=relevant&q=' + param)
         .get() (error, response, body) ->
           results = JSON.parse(body).data
-          rand = results[Math.floor(Math.random() * results.length)]
-          res.send rand.images.original.url
+          if results.length > 0
+            rand = results[Math.floor(Math.random() * results.length)]
+            res.send rand.images.original.url
+          else
+            res.send "Sorry, pero nadie conoce " + param + ' :nerd_face:'
+
     else
       res.send "Déjame buscarte un memazo random"
       res.http(url + 'random?api_key=dc6zaTOxFJmzC')
