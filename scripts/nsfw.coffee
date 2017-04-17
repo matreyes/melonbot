@@ -5,7 +5,10 @@
 module.exports = (robot) ->
 
   robot.hear /^nsfw/i, (res) ->
-    if(res.envelope.room=="prueba" || res.envelope.room=="socios")
+    # res.send 'este es el canal [' + res.envelope.room + ']'
+    allowed = ['prueba', 'socios', 'G0KAB6CRK']
+    allowed.push('Shell') # Comentar para probar "else" en consola
+    if(allowed.indexOf(res.envelope.room) > -1)
       res.http('http://titsnarse.co.uk/random_json.php')
         .get() (error, response, body) ->
           res.send 'http://titsnarse.co.uk'+JSON.parse(body).src
