@@ -7,6 +7,7 @@ module.exports = (robot) ->
 
   publicar = (res) ->
     key = process.env.KEY
+    hubotEnv = process.env.HUBOT_ENV
     if (key?)
       # res.send "#{res.match[1]} #{res.match[2]} #{key}"
       data = JSON.stringify({
@@ -15,7 +16,8 @@ module.exports = (robot) ->
         key: key
       })
       res.send 'Publicando ' + res.match[1] + ' en ' + res.match[2] + ' ...'
-      robot.http("http://productos.meloncargo.com/api/melis/publish")
+      publUrl = if hubotEnv is 'production' then 'http://productos.meloncargo.com' else 'http://localhost:3000'
+      robot.http(publUrl + "/api/melis/publish")
         .header('Content-Type', 'application/json')
         .post(data) (err, response, body) ->
           robot.logger.info('PUBLICAR: \n\tdata-> ' + data + '\n\terr->' + err + '\n\tstatusCode->' + response.statusCode)
