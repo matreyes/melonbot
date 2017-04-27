@@ -14,24 +14,24 @@ module.exports = (robot) ->
         category: res.match[2],
         key: key
       })
+      res.send 'Publicando ' + res.match[1] + ' en ' + res.match[2] + ' ...'
       robot.http("http://productos.meloncargo.com/api/melis/publish")
         .header('Content-Type', 'application/json')
         .post(data) (err, response, body) ->
-          robot.logger.info('PUBLICAR: \n\tdata-> ' + data + '\n\terr->' + err + '\n\tstatusCode->' + response.statusCode + '\n\tbody->' + body)
+          robot.logger.info('PUBLICAR: \n\tdata-> ' + data + '\n\terr->' + err + '\n\tstatusCode->' + response.statusCode)
           if err
-            res.send "Hay algo mal aquí!"
-            return
-          if response.statusCode isnt 200
-            res.send "Quokka me respondió con un error :cry:"
-            return
-          url = JSON.parse(body).url || 'No pude publicar ' + res.match[1] + ' en ' + res.match[2] + ' :sweat_smile:'
-          res.send url
-
+            message = "Hay algo mal aquí!"
+          else if response.statusCode >= 500
+            message = "Quokka me respondió con un error :cry:"
+          else
+            message = JSON.parse(body).url or 'No pude publicar ' + res.match[1] + ' en ' + res.match[2] + ' :sweat_smile:'
+          res.send message
     else
       res.send "No se ingresó el token (KEY)"
 
-  robot.hear /^publicar (.*) en (.*)/i, publicar
-  robot.hear /^p (.*) (.*)/i, publicar
+  robot.hear /^publicar (\w*) en (\w*)$/i, publicar
+  robot.hear /^p (\w*) (\w*)$/i, publicar
+  robot.hear /^p (\w*) en (\w*)$/i, publicar
 
   categoria = (res) ->
     id = /MLC-(\d+)-/i.exec(res.match[1])
