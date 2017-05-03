@@ -27,9 +27,26 @@ module.exports = (robot) ->
             message = "Quokka me respondió con un error :cry:"
           else
             message = JSON.parse(body).url or 'No pude publicar ' + res.match[1] + ' en ' + res.match[2] + ' :sweat_smile:'
-          res.send message
+          res.send process_publicar_result(message)
     else
       res.send "No se ingresó el token (KEY)"
+
+  process_publicar_result = (message) ->
+    robot.logger.info(message)
+    switch true
+      when /AWS\.InvalidParameterValue/.test(message) # p 12345 MLC172569
+        return "No encontré el ítem :angry:";
+      when /item\.category_id\.invalid/.test(message) # p B00HZI5XBG MLC172569
+        return "No encontré la categoría :angry:";
+      when /item\.buying_mode\.invalid/.test(message)
+        reason = message.match(/: \[(.*)\]\./)[1];
+        return "Tu item no se permite en la categoría por: #{reason} :face_with_rolling_eyes:";
+      when /item\.attributes\.missing_required/.test(message) # P B00FGKXJL6 MLC31452
+        return "No pude publicar, ya que la categoría requiere atributos adicionales (ej: talla, color, etc.) que no me es posible entregárselos a meli.\nMejor suerte con el próximo producto :sweat_smile:";
+      when /No available price/.test(message) # p B01MFCTRZM MLC1699
+        return "No pude publicar, ya que amazon no me entregó un precio de este producto.\nPuede deberse a que no hayan nuevos disponibles, solo usados o reaciondicionados :money_mouth_face:"
+      else
+        return message
 
   robot.hear /^publicar (\w*) en (\w*)$/i, publicar
   robot.hear /^p (\w*) (\w*)$/i, publicar
