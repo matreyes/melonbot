@@ -45,6 +45,8 @@ module.exports = (robot) ->
         return "No pude publicar, ya que la categoría requiere atributos adicionales (ej: talla, color, etc.) que no me es posible entregárselos a meli.\nMejor suerte con el próximo producto :sweat_smile:";
       when /No available price/.test(message) # p B01MFCTRZM MLC1699
         return "No pude publicar, ya que amazon no me entregó un precio de este producto.\nPuede deberse a que no hayan nuevos disponibles, solo usados o reaciondicionados :money_mouth_face:"
+      when /internal_error/.test(message)
+        return ":construction_worker: ahora mismo Mercado Libre está con problemas. Inténtalo nuevamente más tarde."
       else
         return message
 
