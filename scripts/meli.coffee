@@ -47,6 +47,8 @@ module.exports = (robot) ->
         return "No pude publicar, ya que amazon no me entregó un precio de este producto.\nPuede deberse a que no hayan nuevos disponibles, solo usados o reaciondicionados :money_mouth_face:"
       when /internal_error/.test(message)
         return ":construction_worker: ahora mismo Mercado Libre está con problemas. Inténtalo nuevamente más tarde."
+      when /You are submitting requests too quickly/.test(message)
+        return "Amazon me reclama que estoy haciendo muchas llamadas. Espera unos segundos y vuelve a intentar :snail:"
       else
         return message
 
