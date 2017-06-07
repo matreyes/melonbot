@@ -49,6 +49,18 @@ module.exports = (robot) ->
         return ":construction_worker: ahora mismo Mercado Libre está con problemas. Inténtalo nuevamente más tarde."
       when /You are submitting requests too quickly/.test(message)
         return "Amazon me reclama que estoy haciendo muchas llamadas. Espera unos segundos y vuelve a intentar :snail:"
+      when /No shipping weight/.test(message)
+        return "No hay información sobre el peso de envío para el producto que trataste de publicar :weight_lifter:"
+      when /Already published/.test(message)
+        return "Este producto ya fue publicado :sunglasses:"
+      when /Product is not present/.test(message)
+        return "Producto no está presente en Quokka :mag_right:"
+      when /Item not available/.test(message)
+        return "Item no se encuentra disponible :package:"
+      when /No category/.test(message)
+        return "No se pudo asignar una categoría al producto :hash:"
+      when /Product disabled/.test(message)
+        return "Producto se encuentra desactivado para publicar :cop:"
       else
         return message
 
