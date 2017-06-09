@@ -8,10 +8,17 @@
 #
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 
-# module.exports = (robot) ->
+module.exports = (robot) ->
 
-  # robot.hear /badger/i, (res) ->
-  #   res.send "Badgers? BADGERS? WE DON'T NEED NO STINKIN BADGERS"
+  robot.hear /^gracias/i, (res) ->
+    rand = Math.random()
+    switch
+      when rand > 0.8 then res.send "No hay de que ;)"
+      when rand > 0.6 then res.send "Cuando gustes pregúntame nuevamente :)"
+      when rand > 0.4 then res.send "Estamos para servirle"
+      when rand < 0.1 then res.send "Es que soy lo mejor que hay :sunglasses:"
+      else res.send "De nada :blush:"
+
   #
   # robot.respond /open the (.*) doors/i, (res) ->
   #   doorType = res.match[1]
