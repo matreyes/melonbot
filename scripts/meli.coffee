@@ -36,6 +36,8 @@ module.exports = (robot) ->
     switch true
       when /AWS\.InvalidParameterValue/.test(message) # p 12345 MLC172569
         return "No encontré el ítem :angry:";
+      when /AWS\.ECommerceService\.ItemNotAccessible/.test(message) # p B0081AWTZA MLC159317
+        return "Amazon informa que este item está bloqueado. Prueba con otro :facepunch:";
       when /item\.category_id\.invalid/.test(message) # p B00HZI5XBG MLC172569
         return "No encontré la categoría :angry:";
       when /item\.buying_mode\.invalid/.test(message)
