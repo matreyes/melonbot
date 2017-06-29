@@ -8,16 +8,19 @@
 #
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
 
+respuestas = [
+  "No hay de que ;)",
+  "Cuando gustes pregúntame nuevamente :)",
+  "Estamos para servirle",
+  "Trabajamos por usted :construction_worker:",
+  "Es que soy lo mejor que hay :sunglasses:",
+  "Los marsupiales tenemos la respuesta de la vida, el universo y todo lo demás :quokka:",
+  "De nada :blush:"
+]
 module.exports = (robot) ->
 
-  robot.hear /^gracias/i, (res) ->
-    rand = Math.random()
-    switch
-      when rand > 0.8 then res.send "No hay de que ;)"
-      when rand > 0.6 then res.send "Cuando gustes pregúntame nuevamente :)"
-      when rand > 0.4 then res.send "Estamos para servirle"
-      when rand < 0.1 then res.send "Es que soy lo mejor que hay :sunglasses:"
-      else res.send "De nada :blush:"
+  robot.hear /gracias/i, (res) ->
+    res.send(res.random(respuestas))
 
   #
   # robot.respond /open the (.*) doors/i, (res) ->
