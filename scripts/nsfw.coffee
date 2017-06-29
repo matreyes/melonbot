@@ -2,18 +2,36 @@
 #   bug -> entrega una excusa, no es mi culpa!
 #   nsfw -> Cuando algo no es seguro para trabajar, no es seguro para trabajar
 
+# Comentar Shell para probar "else" en consola
+allowed = ['prueba', 'socios', 'G0KAB6CRK', 'Shell']
+
+bizarres = [
+  "wtflolporn.tumblr.com",
+  "awkwardjapaneseporngifs.tumblr.com",
+]
+
 module.exports = (robot) ->
+  tumblr = require('tumblrbot')(robot)
 
   robot.hear /^nsfw/i, (res) ->
-    allowed = ['prueba', 'socios', 'G0KAB6CRK']
-    allowed.push('Shell') # Comentar para probar "else" en consola
     if(allowed.indexOf(res.envelope.room) > -1)
       res.http('http://titsnarse.co.uk/random_json.php')
         .get() (error, response, body) ->
           res.send 'http://titsnarse.co.uk'+JSON.parse(body).src
     else
-      robot.logger.info('Trying to get NSFW from: [' + res.envelope.room + ']')
-      res.send 'En Meloncargo trabajamos seguros'
+      safe(res)
+
+  robot.hear /^bizarre/i, (res) ->
+    if(allowed.indexOf(res.envelope.room) > -1)
+      blog = res.random bizarres
+      tumblr.photos(blog).random (post) ->
+        res.send post.photos[0].original_size.url
+    else
+      safe(res)
+
+  safe = (res) ->
+    robot.logger.info('Trying to get NSFW from: [' + res.envelope.room + ']')
+    res.send 'En Meloncargo trabajamos seguros'
 
   robot.hear /^sfw ?(.*)$/i, (res) ->
     param = res.match[1]
