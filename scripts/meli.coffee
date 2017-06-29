@@ -40,9 +40,14 @@ module.exports = (robot) ->
         return "Amazon informa que este item está bloqueado. Prueba con otro :facepunch:";
       when /item\.category_id\.invalid/.test(message) # p B00HZI5XBG MLC172569
         return "No encontré la categoría :angry:";
-      when /item\.buying_mode\.invalid/.test(message)
-        reason = message.match(/: \[(.*)\]\./)[1];
-        return "Tu item no se permite en la categoría por: #{reason} :face_with_rolling_eyes:";
+      when /item\.buying_mode\.invalid/.test(message) # p B007W6X2M8 en MLC32443
+        if /only supports listing modes/.test(message)
+          category = message.match(/Category (.+) only/)[1]
+          modes = message.match(/modes: (.+)$/)[1]
+          return "La categoría #{category} solo soporta publicaciones de tipo: #{modes} :hankey:";
+        else
+          reason = message.match(/.+\)\s(.*)$/)[1]
+          return "Tu item no se permite en la categoría por: #{reason} :face_with_rolling_eyes:";
       when /item\.attributes\.missing_required/.test(message) # P B00FGKXJL6 MLC31452
         return "No pude publicar, ya que la categoría requiere atributos adicionales (ej: talla, color, etc.) que no me es posible entregárselos a meli.\nMejor suerte con el próximo producto :sweat_smile:";
       when /No available price/.test(message) # p B01MFCTRZM MLC1699
