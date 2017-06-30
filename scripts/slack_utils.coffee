@@ -43,14 +43,30 @@ hubotid = null
 getUserId botname, (uid) ->
   hubotid = uid
 
+apologies = [
+  'Me castigo jefecito :skull:',
+  'Nunca mas, looooo juro :mouse:',
+  'SYSTEM ERROR 83764-E, 0A: INVALID TASK STATE SEGMENT FAULT ... \nno, mentira, ya lo borré :P',
+  'Esta bien, borro mi último mensaje, pero conste que solo sigo órdenes :robot_face:',
+  'Pero explicame, ¿por que me mandas a escribir esas malas palabras?',
+  'Lo borraré, pero siempre vivirá en nuestras mentes y corazones :two_hearts:',
+  'Mensaje, vuela alto :airplane:',
+]
 module.exports = (robot) ->
-  robot.respond /slack delete last\s?(\d+)?/i, (msg) ->
-    count = msg.match[1]
-    if not count then count = 1
+
+  robot.hear /borra/i, (msg) ->
+    msg.send msg.random(apologies)
+    # We just need to delete one message
+    # count = msg.match[1]
+    # if not count then count = 1
+    count = 1
+    # `Prueba` channel name
+    # channel = 'G0KAB6CRK'
     channel = msg.message.rawMessage.channel
 
     getHistory channel, (history) ->
       messages = (message for message in history.messages when message.user is hubotid)
       messages = messages.slice 0, count
       for msg, i in messages
+        console.log 'Borrando:', msg.text
         deleteMessage  channel, msg.ts
