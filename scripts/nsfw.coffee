@@ -25,6 +25,7 @@ module.exports = (robot) ->
     if(allowed.indexOf(res.envelope.room) > -1)
       blog = res.random bizarres
       tumblr.photos(blog).random (post) ->
+        console.log post.photos
         res.send post.photos[0].original_size.url
     else
       safe(res)
