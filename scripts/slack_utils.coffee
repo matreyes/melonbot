@@ -16,15 +16,15 @@ token = process.env.HUBOT_SLACK_TOKEN
 botname = process.env.HUBOT_BOT_NAME
 baseURL = 'https://slack.com/api'
 
-getHistory = (channel, cb) ->
+getHistory = (channel, msg, cb) ->
   if (channel.substr(0,1) == "G")
     request.get {url: "#{baseURL}/groups.history?token=#{token}&channel=#{channel}&count=15", json: true}, (err, res, history) ->
       throw err if err
-      cb history
+      cb history, msg
   else
     request.get {url: "#{baseURL}/channels.history?token=#{token}&channel=#{channel}&count=15", json: true}, (err, res, history) ->
       throw err if err
-      cb history
+      cb history, msg
 
 getUserId = (username, cb) ->
   request.get {url: "#{baseURL}/users.list?token=#{token}", json: true}, (err, res, users) ->
@@ -49,8 +49,9 @@ apologies = [
   'SYSTEM ERROR 83764-E, 0A: INVALID TASK STATE SEGMENT FAULT ... \nno, mentira, ya lo borré :P',
   'Esta bien, borro mi último mensaje, pero conste que solo sigo órdenes :robot_face:',
   'Pero explicame, ¿por que me mandas a escribir esas malas palabras?',
-  'Lo borraré, pero siempre vivirá en nuestras mentes y corazones :two_hearts:',
+  'Lo borré, pero siempre vivirá en nuestras mentes y corazones :two_hearts:',
   'Mensaje, vuela alto :airplane:',
+  'Toda evidencia ha sido completamente destruída :gun: :sunglasses:',
 ]
 module.exports = (robot) ->
 
@@ -65,11 +66,11 @@ module.exports = (robot) ->
       channel = msg.message.room
       robot.logger.info 'channel:', channel
 
-      getHistory channel, (history) ->
+      getHistory channel, msg, (history, res) ->
         messages = (message for message in history.messages when message.user is hubotid)
         messages = messages.slice 0, count
         for msg, i in messages
           robot.logger.info 'Borrando:', msg.text
           robot.logger.info 'Borrando:', msg.text
           deleteMessage  channel, msg.ts
-      msg.send msg.random(apologies)
+        res.send res.random(apologies)
