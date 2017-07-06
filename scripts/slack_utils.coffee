@@ -73,4 +73,6 @@ module.exports = (robot) ->
           robot.logger.info 'Borrando:', msg.text
           robot.logger.info 'Borrando:', msg.text
           deleteMessage  channel, msg.ts
-        res.send res.random(apologies)
+        setTimeout (->
+          res.send res.random(apologies)
+        ), 1000
