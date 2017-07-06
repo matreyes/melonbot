@@ -33,7 +33,7 @@ module.exports = (robot) ->
               if json.created_at
                 message = "Ya publiqué #{json.url} antes. Recuerdo que fue hace #{json.created_at} atrás."
               else
-                message = "Publiqué tu producto en #{json.url}"
+                message = json.url
             else
               message = body
           res.send process_publicar_result(message)
