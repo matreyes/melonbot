@@ -54,21 +54,22 @@ apologies = [
 ]
 module.exports = (robot) ->
 
-  robot.hear /borra/i, (msg) ->
-    msg.send msg.random(apologies)
-    # We just need to delete one message
-    # count = msg.match[1]
-    # if not count then count = 1
-    count = 1
-    # `Prueba` channel name
-    # channel = 'G0KAB6CRK'
-    robot.logger.info 'rawMessage:', msg.message.rawMessage
-    channel = msg.message.rawMessage.channel
-    robot.logger.info 'channel:', channel
+  robot.hear /borra\s?(\d+)?/i, (msg) ->
+    count = msg.match[1]
+    if not count then count = 1
+    if count > 5
+      msg.send '¿por que quieres borrar tanto? ¡¡me niego rotundamente!!'
+    else
+      # `Prueba` channel name
+      # channel = 'G0KAB6CRK'
+      channel = msg.message.room
+      robot.logger.info 'channel:', channel
 
-    getHistory channel, (history) ->
-      messages = (message for message in history.messages when message.user is hubotid)
-      messages = messages.slice 0, count
-      for msg, i in messages
-        robot.logger.info 'Borrando:', msg.text
-        deleteMessage  channel, msg.ts
+      getHistory channel, (history) ->
+        messages = (message for message in history.messages when message.user is hubotid)
+        messages = messages.slice 0, count
+        for msg, i in messages
+          robot.logger.info 'Borrando:', msg.text
+          robot.logger.info 'Borrando:', msg.text
+          deleteMessage  channel, msg.ts
+      msg.send msg.random(apologies)
