@@ -4,10 +4,12 @@
 #   donde meto <un/una> <nombre_del_producto> - predice categoría
 
 module.exports = (robot) ->
+  hubotEnv = process.env.HUBOT_ENV
+  robot.logger.debug('ENVIRONMENT IS: ' + hubotEnv)
 
   publicar = (res) ->
     key = process.env.KEY
-    hubotEnv = process.env.HUBOT_ENV
+
     if (key?)
       # res.send "#{res.match[1]} #{res.match[2]} #{key}"
       data = JSON.stringify({
@@ -26,7 +28,14 @@ module.exports = (robot) ->
           else if response.statusCode >= 500
             message = "Quokka me respondió con un error :cry:"
           else
-            message = JSON.parse(body).url or 'No pude publicar ' + res.match[1] + ' en ' + res.match[2] + ' :sweat_smile:'
+            json = JSON.parse(body)
+            if json.url
+              if json.created_at
+                message = "Ya publiqué #{json.url} antes. Recuerdo que fue el #{json.created_at}."
+              else
+                message = "Publiqué tu producto en #{json.url}"
+            else
+              message = body
           res.send process_publicar_result(message)
     else
       res.send "No se ingresó el token (KEY)"
