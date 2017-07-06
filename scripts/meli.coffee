@@ -31,7 +31,7 @@ module.exports = (robot) ->
             json = JSON.parse(body)
             if json.url
               if json.created_at
-                message = "Ya publiqué #{json.url} antes. Recuerdo que fue el #{json.created_at}."
+                message = "Ya publiqué #{json.url} antes. Recuerdo que fue hace #{json.created_at} atrás."
               else
                 message = "Publiqué tu producto en #{json.url}"
             else
