@@ -62,11 +62,13 @@ module.exports = (robot) ->
     count = 1
     # `Prueba` channel name
     # channel = 'G0KAB6CRK'
+    robot.logger.info 'rawMessage:', msg.message.rawMessage
     channel = msg.message.rawMessage.channel
+    robot.logger.info 'channel:', channel
 
     getHistory channel, (history) ->
       messages = (message for message in history.messages when message.user is hubotid)
       messages = messages.slice 0, count
       for msg, i in messages
-        console.log 'Borrando:', msg.text
+        robot.logger.info 'Borrando:', msg.text
         deleteMessage  channel, msg.ts
