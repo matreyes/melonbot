@@ -34,6 +34,8 @@ module.exports = (robot) ->
                 message = "Ya publiqué #{json.url} antes. Recuerdo que fue hace #{json.created_at} atrás."
               else
                 message = json.url
+            else if json.error
+              message = json.error
             else
               message = body
           res.send process_publicar_result(message)
