@@ -1,6 +1,5 @@
 # Commands:
 #   bug -> entrega una excusa, no es mi culpa!
-#   nsfw -> Cuando algo no es seguro para trabajar, no es seguro para trabajar
 
 # Comentar Shell para probar "else" en consola
 allowed = ['prueba', 'socios', 'G0KAB6CRK', 'Shell']
