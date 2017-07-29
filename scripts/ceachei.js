@@ -12,7 +12,7 @@
 //
 // Author:
 //   @jorgeepunan
-
+"use strict";
 
 const ceachei = [
 	    "ce-hache-iiiii",
