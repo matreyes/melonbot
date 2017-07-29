@@ -21,6 +21,8 @@
 
 // process.env.API_URL ||= 'http://mindicador.cl/api' // old, slow and shitty
 // const API_URL = process.env.API_URL || 'http://indicadoresdeldia.cl/webservice/indicadores.json'
+"use strict";
+
 const API_URL = process.env.API_URL || 'http://mindicador.cl/api'
 const BIT_API_URL = process.env.BIT_API_URL || 'https://blockchain.info/es/ticker'
 const mensajes = [
