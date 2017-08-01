@@ -49,6 +49,8 @@ module.exports = (robot) ->
         return "No encontré el ítem :angry:";
       when /AWS\.ECommerceService\.ItemNotAccessible/.test(message) # p B0081AWTZA MLC159317
         return "Amazon informa que este item está bloqueado. Prueba con otro :facepunch:";
+      when /AWS\.InvalidAssociate/.test(message) # p B0081AWTZA MLC159317
+        return "*Amazon nos bloqueó*. Nada que hacer más que llorar en un rincón :crying_cat_face:";
       when /item\.category_id\.invalid/.test(message) # p B00HZI5XBG MLC172569
         return "No encontré la categoría :angry:";
       when /item\.buying_mode\.invalid/.test(message) # p B007W6X2M8 en MLC32443
