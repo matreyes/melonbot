@@ -50,7 +50,7 @@ const ceachei = [
 ];
 
 module.exports = function(robot) {
-	return robot.hear(/ceachei|í/gi, function(msg) {
+	return robot.hear(/ceache[ií]/gi, function(msg) {
 
 		let ceacheieleechichichilelelevivachile = function(i) {
 			if (ceachei[i]) {
