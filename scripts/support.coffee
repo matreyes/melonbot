@@ -23,3 +23,10 @@ module.exports = (robot) ->
       robot.messageRoom '#general', ":zipper_mouth_face: Alguien se quiere concentrar pero hay mucho ruido. Y dice: #{text}"
     else
       robot.messageRoom '#general', ":zipper_mouth_face: Alguien se quiere concentrar pero hay mucho ruido."
+
+  robot.respond /problemas(.*)/i, (msg) -> #test local
+    text = msg.match[1]
+    robot.messageRoom '#general', "Estamos con problemas técnicos en este momento. #{text} Gracias por su comprensión :construction_worker:"
+
+  robot.respond /resuelto/i, (msg) -> #test local
+    robot.messageRoom '#general', "El sistema se encuentra operativo nuevamente. Gracias por su paciencia y comprensión. :quokka:"
