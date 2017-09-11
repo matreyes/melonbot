@@ -9,23 +9,28 @@ bizarres = [
   "awkwardjapaneseporngifs.tumblr.com",
 ]
 
+bizarre_talk = [
+  'Ya, me fui a la chucha nuevamente :scream:',
+  'Me puse extremo pa mis cosas :see_no_evil:',
+  'Esto es lo más rancio que pillé :confounded:' ,
+  'Traido para ud directamente de la deep web :computer:',
+  'Ups, no quería mostrarte esto :smiling_imp:'
+]
+
 module.exports = (robot) ->
   tumblr = require('tumblrbot')(robot)
 
   robot.hear /^nsfw/i, (res) ->
     if(allowed.indexOf(res.envelope.room) > -1)
-      res.http('http://titsnarse.co.uk/random_json.php')
-        .get() (error, response, body) ->
-          res.send 'http://titsnarse.co.uk'+JSON.parse(body).src
-    else
-      safe(res)
-
-  robot.hear /^bizarre/i, (res) ->
-    if(allowed.indexOf(res.envelope.room) > -1)
-      blog = res.random bizarres
-      tumblr.photos(blog).random (post) ->
-        console.log post.photos
-        res.send post.photos[0].original_size.url
+      if(Math.random() > 0.2)
+        res.http('http://titsnarse.co.uk/random_json.php')
+          .get() (error, response, body) ->
+            res.send 'http://titsnarse.co.uk'+JSON.parse(body).src
+      else
+        res.send res.random(bizarre_talk)
+        tumblr.photos(res.random bizarres).random (post) ->
+          console.log post.photos
+          res.send post.photos[0].original_size.url
     else
       safe(res)
 
