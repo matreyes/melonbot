@@ -55,7 +55,7 @@ apologies = [
 ]
 module.exports = (robot) ->
 
-  robot.hear /borra\s?(\d+)?/i, (msg) ->
+  robot.respond /.*borra\w*\s?(\d+)?/i, (msg) ->
     count = msg.match[1]
     if not count then count = 1
     if count > 5

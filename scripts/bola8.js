@@ -34,7 +34,7 @@ var consejos = [
 ];
 
 module.exports = function(robot) {
-  robot.respond(/pregunta|consejo|duda/gi, function(res) {
+  robot.respond(/.*(pregunta|consejo|duda)/gi, function(res) {
 
     res.send( ':quokka: ~ ' + res.random(consejos) );
 

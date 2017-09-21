@@ -14,7 +14,7 @@
 #   @jorgeepunan
 
 module.exports = (robot) ->
-  robot.hear /(.*)hora/i, (msg) ->
+  robot.respond /.*\shora(\s|$)/i, (msg) ->
 
     #from DayTimr.js
     #https://github.com/juanbrujo/daytimr/blob/master/js/jquery.dayTimr-1.0.js
