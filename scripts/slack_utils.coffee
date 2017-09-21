@@ -67,12 +67,15 @@ module.exports = (robot) ->
       robot.logger.info 'channel:', channel
 
       getHistory channel, msg, (history, res) ->
-        messages = (message for message in history.messages when message.user is hubotid)
-        messages = messages.slice 0, count
-        for msg, i in messages
-          robot.logger.info 'Borrando:', msg.text
-          robot.logger.info 'Borrando:', msg.text
-          deleteMessage  channel, msg.ts
-        setTimeout (->
-          res.send res.random(apologies)
-        ), 1000
+        if history.messages is undefined
+          res.send 'No hay nada que borrar'
+        else
+          messages = (message for message in history.messages when message.user is hubotid)
+          messages = messages.slice 0, count
+          for msg, i in messages
+            robot.logger.info 'Borrando:', msg.text
+            robot.logger.info 'Borrando:', msg.text
+            deleteMessage  channel, msg.ts
+          setTimeout (->
+            res.send res.random(apologies)
+          ), 1000
