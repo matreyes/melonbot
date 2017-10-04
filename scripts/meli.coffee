@@ -103,6 +103,9 @@ module.exports = (robot) ->
         if response.statusCode isnt 200
           res.send "MeLi me respondió con un error :("
           return
+        if body == '[]'
+          res.send "Categoría #{mlc_id} no existe"
+          return
         pbody = JSON.parse body
         robot.http("https://api.mercadolibre.com/categories/#{pbody[0].category_id}")
           .get() (err, response, body2) ->
