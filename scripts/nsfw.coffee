@@ -22,7 +22,7 @@ module.exports = (robot) ->
 
   robot.hear /^nsfw/i, (res) ->
     if(allowed.indexOf(res.envelope.room) > -1)
-      if(Math.random() > 0.2)
+      if(Math.random() > 0.1)
         res.http('http://titsnarse.co.uk/random_json.php')
           .get() (error, response, body) ->
             res.send 'http://titsnarse.co.uk'+JSON.parse(body).src
