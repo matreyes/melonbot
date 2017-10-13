@@ -20,20 +20,27 @@ bizarre_talk = [
 module.exports = (robot) ->
   tumblr = require('tumblrbot')(robot)
 
-  robot.hear /^nsfw/i, (res) ->
+  robot.hear /^nsfw ?(.*)$/i, (res) ->
     if(allowed.indexOf(res.envelope.room) > -1)
-      if(Math.random() > 0.1)
-        res.http('http://titsnarse.co.uk/random_json.php')
-          .get() (error, response, body) ->
-            res.send 'http://titsnarse.co.uk'+JSON.parse(body).src
+      param = res.match[1]
+      if param == 'bomb'
+        for i in [1..5]
+          nsfw(res)
       else
-        res.send res.random(bizarre_talk)
-        tumblr.photos(res.random bizarres).random (post) ->
-          console.log post.photos
-          res.send post.photos[0].original_size.url
+        nsfw(res)
     else
       safe(res)
 
+  nsfw = (res) ->
+    if(Math.random() > 0.1)
+      res.http('http://titsnarse.co.uk/random_json.php')
+        .get() (error, response, body) ->
+          res.send 'http://titsnarse.co.uk'+JSON.parse(body).src
+    else
+      res.send res.random(bizarre_talk)
+      tumblr.photos(res.random bizarres).random (post) ->
+        console.log post.photos
+        res.send post.photos[0].original_size.url
   safe = (res) ->
     robot.logger.info('Trying to get NSFW from: [' + res.envelope.room + ']')
     res.send 'En Meloncargo trabajamos seguros'
