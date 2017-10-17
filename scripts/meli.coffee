@@ -13,11 +13,12 @@ module.exports = (robot) ->
     if (key?)
       # res.send "#{res.match[1]} #{res.match[2]} #{key}"
       data = JSON.stringify({
-        asin: res.match[1],
-        category: res.match[2],
+        asin: res.match[2],
+        category: res.match[4],
         key: key
       })
-      res.send 'Publicando ' + res.match[1] + ' en ' + res.match[2] + ' ...'
+      console.log(data)
+      res.send 'Publicando ' + res.match[2] + ' en ' + res.match[4] + ' ...'
       publUrl = if hubotEnv is 'production' then 'http://productos.meloncargo.com' else 'http://localhost:3000'
       robot.http(publUrl + "/api/melis/publish")
         .header('Content-Type', 'application/json')
@@ -84,14 +85,12 @@ module.exports = (robot) ->
       else
         return message
 
-  robot.hear /^publicar (\w*) en (\w*)$/i, publicar
-  robot.hear /^p (\w*) (\w*)$/i, publicar
-  robot.hear /^p (\w*) en (\w*)$/i, publicar
+  robot.hear /^(publica[r]?|p)\s+(\w+)(\s+en)?\s+(\w+)$/i, publicar
 
   categoria = (res) ->
-    id = /MLC-(\d+)-/i.exec(res.match[1])
+    id = /MLC-(\d+)-/i.exec(res.match[3])
     if !id
-      res.send("Me parece que " + res.match[1] + " no es una dirección meli válida")
+      res.send("Me parece que " + res.match[3] + " no es una dirección meli válida")
       return
     mlc_id = "MLC#{id[1]}"
     robot.http("https://api.mercadolibre.com/items?ids=#{mlc_id}&attributes=category_id")
@@ -120,12 +119,11 @@ module.exports = (robot) ->
             tree = pbody2.path_from_root.map( (x) -> x.name ).join(" > ")
             res.send "#{pbody2.id} #{tree}"
 
-  robot.hear /^categor[í|i]a de (.*)/i, categoria
-  robot.hear /^c (.*)/i, categoria
+  robot.hear /^(categor[í|i]a|c)(\s+de)?\s+(\S+)/i, categoria
 
   dondeMeto = (res) ->
     data = JSON.stringify([{
-      title: res.match.pop()
+      title: res.match[3]
     }])
 
     robot.http("https://api.mercadolibre.com/sites/MLC/category_predictor/predict")
@@ -145,5 +143,4 @@ module.exports = (robot) ->
         else
           res.send "#{pbody.id} #{tree}"
 
-  robot.hear /^donde meto (un|una|unos|unas) (.*)/i, dondeMeto
-  robot.hear /^dm (.*)/i, dondeMeto
+  robot.hear /^(donde meto|dm)\s*(un|una|unos|unas)?\s+(\S+)/i, dondeMeto
