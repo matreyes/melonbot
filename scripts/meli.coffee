@@ -138,9 +138,10 @@ module.exports = (robot) ->
           return
         pbody = JSON.parse(body)[0]
         tree = pbody.path_from_root.map( (x) -> x.name ).join(" > ")
+        chances = pbody.prediction_probability * 100
         if(Math.random() < 0.1)
-          res.send "Mételo por: #{pbody.id} #{tree}"
+          res.send "Mételo por: #{pbody.id} #{tree} (#{chances}% de probabilidad)"
         else
-          res.send "#{pbody.id} #{tree}"
+          res.send "#{pbody.id} #{tree} (#{chances}% de probabilidad)"
 
   robot.hear /^(donde meto|dm)\s*(un|una|unos|unas)?\s+(\S+)/i, dondeMeto
