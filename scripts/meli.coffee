@@ -122,10 +122,8 @@ module.exports = (robot) ->
   robot.hear /^(categor[í|i]a|c)(\s+de)?\s+(\S+)/i, categoria
 
   dondeMeto = (res) ->
-    data = JSON.stringify([{
-      title: res.match[3]
-    }])
-
+    title = res.match[3]
+    data = JSON.stringify([{ title: title }])
     robot.http("https://api.mercadolibre.com/sites/MLC/category_predictor/predict")
       .header('Content-Type', 'application/json')
       .post(data) (err, response, body) ->
@@ -138,10 +136,20 @@ module.exports = (robot) ->
           return
         pbody = JSON.parse(body)[0]
         tree = pbody.path_from_root.map( (x) -> x.name ).join(" > ")
-        chances = pbody.prediction_probability * 100
+        perc = Math.round(pbody.prediction_probability * 100)
+        chances = "(#{perc}% de probabilidad de acierto)"
+        mark = ':white_check_mark:'
+        aditional = ''
+        if perc < 40 && perc >= 20
+          mark = ":warning:"
+          aditional = "\n ¿quizás se pueda refinar la búsqueda de #{title}? #{chances}"
+        else if perc < 20
+          mark = ":bangbang:"
+          aditional = "\n Quizás una categoría adecuada para #{title} no puede ser encontrada #{chances}"
+        msg = "#{mark} #{pbody.id} #{tree} #{aditional}"
         if(Math.random() < 0.1)
-          res.send "Mételo por: #{pbody.id} #{tree} (#{chances}% de probabilidad)"
+          res.send "Mételo por: #{msg}"
         else
-          res.send "#{pbody.id} #{tree} (#{chances}% de probabilidad)"
+          res.send msg
 
-  robot.hear /^(donde meto|dm)\s*(un|una|unos|unas)?\s+(\S+)/i, dondeMeto
+  robot.hear /^(donde meto|dm)\s*(un|una|unos|unas)?\s+(.+)/i, dondeMeto
