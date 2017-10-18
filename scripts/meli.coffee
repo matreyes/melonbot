@@ -3,6 +3,34 @@
 #   categoría de <url_meli>
 #   donde meto <un/una> <nombre_del_producto> - predice categoría
 
+# taken from quokka (config/initializers/variables.rb)
+restricted_categories = [
+  'MLC1055',
+  'MLC1271',
+  'MLC1247',
+  'MLC175504',
+  'MLC1259',
+  'MLC8163',
+  'MLC174669',
+  'MLC1266',
+  'MLC174672',
+  'MLC174813',
+  'MLC174675',
+  'MLC174676',
+  'MLC174671',
+  'MLC7729',
+  'MLC174678',
+  'MLC174672',
+  'MLC178731',
+  'MLC174816',
+  'MLC174817',
+  'MLC44117',
+  'MLC29890',
+  'MLC1251',
+  'MLC1249',
+  'MLC1252'
+]
+
 module.exports = (robot) ->
   hubotEnv = process.env.HUBOT_ENV
   robot.logger.debug('ENVIRONMENT IS: ' + hubotEnv)
@@ -136,20 +164,26 @@ module.exports = (robot) ->
           return
         pbody = JSON.parse(body)[0]
         tree = pbody.path_from_root.map( (x) -> x.name ).join(" > ")
+        aditional = ''
+        pre = ''
+        restriction = is_restricted(pbody.path_from_root)
+        if restriction != undefined
+          pre = ":bangbang: *Te recuerdo que #{title} pertenece a '#{restriction}', una de nuestras categorías restringidas*\n"
         perc = Math.round(pbody.prediction_probability * 100)
         chances = "(#{perc}% de probabilidad de acierto)"
         mark = ':white_check_mark:'
-        aditional = ''
         if perc < 40 && perc >= 20
           mark = ":warning:"
           aditional = "\n ¿quizás se pueda refinar la búsqueda de #{title}? #{chances}"
         else if perc < 20
-          mark = ":bangbang:"
+          mark = ":exclamation:"
           aditional = "\n Quizás una categoría adecuada para #{title} no puede ser encontrada #{chances}"
-        msg = "#{mark} #{pbody.id} #{tree} #{aditional}"
-        if(Math.random() < 0.1)
-          res.send "Mételo por: #{msg}"
-        else
-          res.send msg
+        res.send "#{pre}#{mark} #{pbody.id} #{tree} #{aditional}"
+
+  is_restricted = (paths) ->
+    for i in paths
+      if restricted_categories.indexOf(i.id) >= 0
+        return i.name
+    return undefined
 
   robot.hear /^(donde meto|dm)\s*(un|una|unos|unas)?\s+(.+)/i, dondeMeto
