@@ -1,18 +1,13 @@
 // Description:
 //   Dice cuándo es el feriado mas próximo en Chile
-
 // Dependencies:
 //   none
-
 // Configuration:
 //   none
-
 // Commands:
-//   hubot pr(o|ó)ximo feriado - Retorna la cantidad de días, la fecha y el motivo del próximo feriado en Chile
-
+//   melonbot pr(o|ó)ximo feriado - Retorna la cantidad de días, la fecha y el motivo del próximo feriado en Chile
 // Author:
 //   @victorsanmartin
-
 // Co-Author:
 //   @jorgeepunan
 

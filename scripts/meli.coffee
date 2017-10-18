@@ -1,7 +1,7 @@
 # Commands:
-#   publicar <asin> en <category_meli>
-#   categoría de <url_meli>
-#   donde meto <un/una> <nombre_del_producto> - predice categoría
+#   publicar <asin> en <category_meli> - (Ya no funciona) Publica un producto de amazon en Mercado Libre
+#   categoría de <url_meli> - Retorna categoría para una url de un producto Mercado Libre
+#   donde meto <un/una> <nombre_del_producto> - Predice una categoría basado en el texto que se le entrega
 
 # taken from quokka (config/initializers/variables.rb)
 restricted_categories = [

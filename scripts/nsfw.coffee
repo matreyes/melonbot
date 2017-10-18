@@ -1,5 +1,6 @@
 # Commands:
 #   bug -> entrega una excusa, no es mi culpa!
+#   sfw <palabra> -> Busca un gif animado del texto indicado
 
 # Comentar Shell para probar "else" en consola
 allowed = ['prueba', 'socios', 'G0KAB6CRK', 'Shell']

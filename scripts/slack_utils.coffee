@@ -6,7 +6,7 @@
 #   HUBOT_BOT_NAME
 #
 # Commands:
-#   slack delete last [<count>] - <Delete the last (N) Hubot posts in the current room or group>
+#   melonbot borra [<cantidad>] - Borra los últimos N mensajes de melonbot
 #
 # Author:
 #   brianantonelli <brian.antonelli@autotrader.com>

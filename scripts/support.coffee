@@ -9,7 +9,7 @@
 #   None
 #
 # Commands:
-#   None, it works by itself
+#   melonbot silencio <mensaje opcional> - Envía mensaje de silencio anónimo a #general
 #
 # Author:
 #   jorgeepunan

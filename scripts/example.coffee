@@ -7,6 +7,9 @@
 #   Uncomment the ones you want to try and experiment with.
 #
 #   These are from the scripting documentation: https://github.com/github/hubot/blob/master/docs/scripting.md
+#
+# Commands:
+#   gracias - Melonbot te da las gracias
 
 respuestas = [
   "No hay de que ;)",

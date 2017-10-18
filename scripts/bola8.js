@@ -8,7 +8,7 @@
 //   None
 //
 // Commands:
-//   melonbot pregunta|consejo
+//   melonbot pregunta|consejo|duda <tu pregunta> - Melonbot te da un consejo
 
 var consejos = [
   'En mi opinión, sí',
