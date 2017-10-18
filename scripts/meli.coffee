@@ -166,18 +166,19 @@ module.exports = (robot) ->
         tree = pbody.path_from_root.map( (x) -> x.name ).join(" > ")
         aditional = ''
         pre = ''
+        mark = ''
         restriction = is_restricted(pbody.path_from_root)
         if restriction != undefined
           pre = ":bangbang: *Te recuerdo que #{title} pertenece a '#{restriction}', una de nuestras categorías restringidas*\n"
-        perc = Math.round(pbody.prediction_probability * 100)
-        chances = "(#{perc}% de probabilidad de acierto)"
-        mark = ':white_check_mark:'
-        if perc < 40 && perc >= 20
-          mark = ":warning:"
-          aditional = "\n ¿quizás se pueda refinar la búsqueda de #{title}? #{chances}"
-        else if perc < 20
-          mark = ":exclamation:"
-          aditional = "\n Quizás una categoría adecuada para #{title} no puede ser encontrada #{chances}"
+        # perc = Math.round(pbody.prediction_probability * 100)
+        # chances = "(#{perc}% de probabilidad de acierto)"
+        # mark = ':white_check_mark:'
+        # if perc < 40 && perc >= 20
+        #   mark = ":warning:"
+        #   aditional = "\n ¿quizás se pueda refinar la búsqueda de #{title}? #{chances}"
+        # else if perc < 20
+        #   mark = ":exclamation:"
+        #   aditional = "\n Quizás una categoría adecuada para #{title} no puede ser encontrada #{chances}"
         res.send "#{pre}#{mark} #{pbody.id} #{tree} #{aditional}"
 
   is_restricted = (paths) ->
