@@ -39,9 +39,8 @@ module.exports = (robot) ->
           res.send 'http://titsnarse.co.uk'+JSON.parse(body).src
     else
       tumblr.photos(res.random bizarres).random (post) ->
-        res.send res.random(bizarre_talk)
         console.log post.photos
-        res.send post.photos[0].original_size.url
+        res.send res.random(bizarre_talk) + ' ' + post.photos[0].original_size.url
   safe = (res) ->
     robot.logger.info('Trying to get NSFW from: [' + res.envelope.room + ']')
     res.send 'En Meloncargo trabajamos seguros'
