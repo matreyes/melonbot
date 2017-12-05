@@ -23,6 +23,7 @@
 
 module.exports = (robot) ->
   onlyActiveUsers = (user) ->
+    # return user.id == 'U2K30SM2T'
     return not user.deleted and not user.is_bot and user.name isnt "slackbot"
 
   secretSantaShuffle = (people) ->
@@ -62,7 +63,8 @@ module.exports = (robot) ->
     if status isnt "finish"
       robot.brain.set("amigo-secreto:status", "finish")
       brain = robot.brain.get("amigo-secreto:users")
-      ids = brain.map((x) -> x.id)
+      ids = brain.filter((x) -> x.participate).map((x) -> x.id)
+
       tuplas = secretSantaShuffle(ids)
       wishes = robot.brain.get("amigo-secreto:wishes") or []
       return robot.adapter.client.web.users.list()
@@ -88,7 +90,7 @@ module.exports = (robot) ->
             else
               message += "\nTu amigo aún no ha deseado nada." +
               "\nPuedes consultar más tarde con el comando " +
-              "`amigo secreto que regalar`"
+              "`amigo secreto que regalar a #{x.user2.name}`"
             robot.adapter.client.web.chat.postMessage(
               x.user1.id, message, options)
 
@@ -101,10 +103,10 @@ module.exports = (robot) ->
       robot.adapter.client.web.users.list()
         .then (data) ->
           data.members.filter(onlyActiveUsers).forEach (x) ->
-            message = "¿Hola #{x.real_name or x.name} quieres participar " +
+            message = "Hola #{x.real_name or x.name} ¿quieres participar " +
             "del amigo secreto?\n" +
-            "De ser así responde aquí con `amigo secreto participar`\n" +
-            "De lo contrario responde aquí con `amigo secreto nica`"
+            "De ser así respóndeme con `amigo secreto participar`\n" +
+            "De lo contrario respóndeme con `amigo secreto nica`"
             robot.adapter.client.web.chat.postMessage x.id, message, options
         .catch (err) ->
           robot.emit("error", err)
@@ -118,18 +120,16 @@ module.exports = (robot) ->
     user.participate = true
     robot.brain.set("amigo-secreto:users", brain)
     message = ":tada: Felicitaciones :tada:\n" +
-    "Una vez que todos confirmen se procederá a realizar el sorteo.\n" +
+    "Una vez que todos confirmen, se procederá a realizar el sorteo.\n" +
     "Mientras tanto puedes agregar cosas que quieras recibir con el " +
-    "comando `amigo secreto deseo <lo que quieras>`."
+    "comando `amigo secreto deseo <lo que quieras>`.\n" +
+    "Puedes llamar el comando las veces que quieras y luego revisar con el" +
+    "comando `amigo secreto mis deseos` cuales cosas has agregado."
+
     if process.env.AMIGO_SECRETO_MONTO
       message += "\nRecuerda que se acordó que los regalos fueran de un " +
-      "precio aproximado a $#{process.env.AMIGO_SECRETO_MONTO}"
-    robot.adapter.client.web.users.list()
-      .then (data) ->
-        users = data.members.filter(onlyActiveUsers)
-        res.send message
-      .catch (err) ->
-        robot.emit("error", err)
+      "*precio no mayor a $#{process.env.AMIGO_SECRETO_MONTO}*"
+    res.send message
 
   robot.respond /amigo secreto nica$/i, (res) ->
     brain = robot.brain.get("amigo-secreto:users") or []
@@ -140,12 +140,6 @@ module.exports = (robot) ->
     user.participate = false
     robot.brain.set("amigo-secreto:users", brain)
     res.send ":cry: ok, para la próxima sera :wave:"
-    robot.adapter.client.web.users.list()
-      .then (data) ->
-        users = data.members.filter(onlyActiveUsers)
-        res.send message
-      .catch (err) ->
-        robot.emit("error", err)
 
   robot.respond /amigo secreto deseo (.+)$/i, (res) ->
     wish = res.match[1]
@@ -177,7 +171,7 @@ module.exports = (robot) ->
             "nada. Piensa en un buen :gift:"
             if process.env.AMIGO_SECRETO_MONTO
               message += "\nRecuerda que se acordó que los regalos fueran " +
-              "de un precio aproximado a $#{process.env.AMIGO_SECRETO_MONTO}"
+              "de un *precio no mayor a $#{process.env.AMIGO_SECRETO_MONTO}*"
               res.send(message)
 
   robot.respond /amigo secreto sortear$/i, (res) ->
