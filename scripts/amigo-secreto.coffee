@@ -94,6 +94,14 @@ module.exports = (robot) ->
             robot.adapter.client.web.chat.postMessage(
               x.user1.id, message, options)
 
+  userWithWishes = (user) ->
+    wishes = robot.brain.get("amigo-secreto:wishes") or []
+    wish = wishes.find((x) -> x.id is user.id)
+    if wish?
+      return "#{x.id} (#{x.name}):\n #{wish.join('\n')}"
+    else
+      return "#{x.id} (#{x.name})"
+
   options = {as_user: true}
 
   robot.respond /amigo secreto iniciar$/i, (res) ->
@@ -165,7 +173,6 @@ module.exports = (robot) ->
         user = data.members.find((x) -> x.name is username)
         if user?
           wishes = robot.brain.get("amigo-secreto:wishes") or []
-          console.log('wishes:', wishes)
           wishe = wishes.find((x) -> x.id is user.id)
           if wishe?
             _wishes = wishe.wishes.map((x, i) -> "#{i + 1}) #{x}").join("\n")
@@ -183,6 +190,10 @@ module.exports = (robot) ->
   robot.respond /amigo secreto sortear$/i, (res) ->
     res.send("Suerte y recuerda eligir un buen :gift:")
     startDraw()
+
+  robot.respond /amigo secreto concursantes$/i, (res) ->
+    users = data.members.filter(onlyActiveUsers).map(userWithWishes)
+    res.send("Concursantes: #{users.join('\n')}")
 
   robot.respond /amigo secreto reiniciar$/i, (res) ->
     robot.brain.set("amigo-secreto:users", [])
