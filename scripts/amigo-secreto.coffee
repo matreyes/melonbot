@@ -98,7 +98,7 @@ module.exports = (robot) ->
     wishes = robot.brain.get("amigo-secreto:wishes") or []
     wish = wishes.find((x) -> x.id is user.id)
     if wish?
-      return "#{user.id} (#{user.name}):\n #{wish}"
+      return "#{user.id} (#{user.name}):\n #{JSON.stringify(wish)}"
     else
       return "#{user.id} (#{user.name})"
 
