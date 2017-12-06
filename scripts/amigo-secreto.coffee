@@ -200,7 +200,7 @@ module.exports = (robot) ->
         outUsers = []
         robot.brain.get("amigo-secreto:users").forEach (u) ->
           user = data.members.find((x) -> x.id is u.id)
-          if user.participate
+          if u.participate
             wishes = wishesFor(user)
             if wishes?
               inUsers.push("#{user.real_name or user.name} y ya pidió su :gift:")
@@ -208,8 +208,8 @@ module.exports = (robot) ->
               inUsers.push(user.real_name or user.name)
           else
             outUsers.push(user.real_name or user.name)
-        res.send "Participantes:\n#{inUsers.join('\n')}"
-        res.send "No están ni ahí:\n#{outUsers.join('\n')}"
+        res.send "*Personas geniales que ya me confirmaron*:\n#{inUsers.join('\n')}\n" +
+                 "*No les interesa nada y quieren ver arder este mundo*:\n#{outUsers.join('\n')}"
       .catch((err) -> robot.emit("error", err))
 
   robot.respond /amigo secreto mis deseos$/i, (res) ->
