@@ -165,6 +165,7 @@ module.exports = (robot) ->
         user = data.members.find((x) -> x.name is username)
         if user?
           wishes = robot.brain.get("amigo-secreto:wishes") or []
+          console.log('wishes:', wishes)
           wishe = wishes.find((x) -> x.id is user.id)
           if wishe?
             _wishes = wishe.wishes.map((x, i) -> "#{i + 1}) #{x}").join("\n")
