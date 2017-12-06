@@ -94,13 +94,9 @@ module.exports = (robot) ->
             robot.adapter.client.web.chat.postMessage(
               x.user1.id, message, options)
 
-  userWithWishes = (user) ->
+  wishesFor = (user) ->
     wishes = robot.brain.get("amigo-secreto:wishes") or []
-    wish = wishes.find((x) -> x.id is user.id)
-    if wish?
-      return "#{user.id} (#{user.name}):\n #{JSON.stringify(wish)}"
-    else
-      return "#{user.id} (#{user.name})"
+    return wishes.find((x) -> x.id is user.id)
 
   options = {as_user: true}
 
@@ -191,11 +187,6 @@ module.exports = (robot) ->
     res.send("Suerte y recuerda eligir un buen :gift:")
     startDraw()
 
-  robot.respond /amigo secreto concursantes$/i, (res) ->
-    robot.adapter.client.web.users.list().then (data) ->
-      users = data.members.filter(onlyActiveUsers).map(userWithWishes)
-      res.send("Concursantes: #{users.join('\n')}")
-
   robot.respond /amigo secreto reiniciar$/i, (res) ->
     robot.brain.set("amigo-secreto:users", [])
     robot.brain.set("amigo-secreto:wishes", [])
@@ -205,12 +196,20 @@ module.exports = (robot) ->
   robot.respond /amigo secreto participantes$/i, (res) ->
     robot.adapter.client.web.users.list()
       .then (data) ->
-        users = robot.brain.get("amigo-secreto:users")
-        res.send users.map (u) ->
+        inUsers = []
+        outUsers = []
+        robot.brain.get("amigo-secreto:users").data.forEach (u) ->
           user = data.members.find((x) -> x.id is u.id)
-          participate = if u.participate then "esta" else "no esta"
-          "#{user.real_name or user.name} #{participate} participando"
-        .join("\n")
+          if user.participate
+            wishes = wishesFor(user)
+            if wishes?
+              inUsers.push("#{user.real_name or user.name} y ya pidió su :gift:")
+            else
+              inUsers.push(user.real_name or user.name)
+          else
+            outUsers.push(user.real_name or user.name)
+        res.send "Participantes:\n#{inUsers.join('\n')}"
+        res.send "No están ni ahí:\n#{outUsers.join('\n')}"
       .catch((err) -> robot.emit("error", err))
 
   robot.respond /amigo secreto mis deseos$/i, (res) ->
