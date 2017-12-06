@@ -108,9 +108,9 @@ module.exports = (robot) ->
         .then (data) ->
           users = []
           data.members.filter(onlyActiveUsers).forEach (x) ->
-            message = "*ATENCION. ESTE ES SOLO UN AMIGO SECRETO DE PRUEBA, NO ES EL REAL. DATE POR AVISAD@*\n"
+            # message = "*ATENCION. ESTE ES SOLO UN AMIGO SECRETO DE PRUEBA, NO ES EL REAL. DATE POR AVISAD@*\n"
             name = x.real_name or x.name
-            message += "Hola #{name} ¿quieres participar " +
+            message = "Hola #{name} ¿quieres participar " +
             "del amigo secreto?\n" +
             "De ser así respóndeme con `amigo secreto participar`\n" +
             "De lo contrario respóndeme con `amigo secreto nica`"
