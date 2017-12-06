@@ -199,7 +199,7 @@ module.exports = (robot) ->
         inUsers = []
         outUsers = []
         notConfirmed = []
-        data.members.forEach (u) ->
+        data.members.filter(onlyActiveUsers).forEach (u) ->
           user = robot.brain.get("amigo-secreto:users").find((x) -> x.id is u.id)
           if user?
             if user.participate
