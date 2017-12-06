@@ -198,18 +198,24 @@ module.exports = (robot) ->
       .then (data) ->
         inUsers = []
         outUsers = []
-        robot.brain.get("amigo-secreto:users").forEach (u) ->
-          user = data.members.find((x) -> x.id is u.id)
-          if u.participate
-            wishes = wishesFor(user)
-            if wishes?
-              inUsers.push("#{user.real_name or user.name} y ya pidió su :gift:")
+        notConfirmed = []
+        data.members.forEach (u) ->
+          user = robot.brain.get("amigo-secreto:users").find((x) -> x.id is u.id)
+          if user?
+            if user.participate
+              wishes = wishesFor(user)
+              if wishes?
+                inUsers.push("#{u.real_name or u.name} y ya pidió su :gift:")
+              else
+                inUsers.push(u.real_name or u.name)
             else
-              inUsers.push(user.real_name or user.name)
+              outUsers.push(u.real_name or u.name)
           else
-            outUsers.push(user.real_name or user.name)
-        res.send "*Personas geniales que ya me confirmaron*:\n#{inUsers.join('\n')}\n" +
-                 "*No les interesa nada y quieren ver arder este mundo*:\n#{outUsers.join('\n')}"
+            notConfirmed.push(u.real_name or u.name)
+
+        res.send "*Personas geniales que ya me confirmaron* :heart_eyes: :\n#{inUsers.join('\n')}\n\n" +
+                 "*Aún no me confirman :unamused: *:\n#{notConfirmed.join('\n')}\n\n" +
+                 "*No les interesa nada y quieren ver arder este mundo* :zap: :fire: :boom: :\n#{outUsers.join('\n')}"
       .catch((err) -> robot.emit("error", err))
 
   robot.respond /amigo secreto mis deseos$/i, (res) ->
