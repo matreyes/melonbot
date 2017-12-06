@@ -198,7 +198,7 @@ module.exports = (robot) ->
       .then (data) ->
         inUsers = []
         outUsers = []
-        robot.brain.get("amigo-secreto:users").data.forEach (u) ->
+        robot.brain.get("amigo-secreto:users").forEach (u) ->
           user = data.members.find((x) -> x.id is u.id)
           if user.participate
             wishes = wishesFor(user)
