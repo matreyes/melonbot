@@ -192,8 +192,9 @@ module.exports = (robot) ->
     startDraw()
 
   robot.respond /amigo secreto concursantes$/i, (res) ->
-    users = data.members.filter(onlyActiveUsers).map(userWithWishes)
-    res.send("Concursantes: #{users.join('\n')}")
+    robot.adapter.client.web.users.list().then (data) ->
+      users = data.members.filter(onlyActiveUsers).map(userWithWishes)
+      res.send("Concursantes: #{users.join('\n')}")
 
   robot.respond /amigo secreto reiniciar$/i, (res) ->
     robot.brain.set("amigo-secreto:users", [])
