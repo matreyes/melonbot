@@ -51,7 +51,7 @@ module.exports = (robot) ->
       robot.http(publUrl + "/api/melis/publish")
         .header('Content-Type', 'application/json')
         .post(data) (err, response, body) ->
-          robot.logger.info('PUBLICAR: \n\tdata-> ' + data + '\n\terr->' + err + '\n\tstatusCode->' + response.statusCode)
+          robot.logger.info('PUBLICAR: \n\tdata-> ' + data + '\n\terr->' + err)
           if err
             message = "Hay algo mal aquí!"
           else if response.statusCode >= 500
@@ -123,7 +123,7 @@ module.exports = (robot) ->
     mlc_id = "MLC#{id[1]}"
     robot.http("https://api.mercadolibre.com/items?ids=#{mlc_id}&attributes=category_id")
       .get() (err, response, body) ->
-        robot.logger.info('CATEGORÍA: \n\tmlc_id-> ' + mlc_id + '\n\terr->' + err + '\n\tstatusCode->' + response.statusCode + '\n\tbody->' + body)
+        robot.logger.info('CATEGORÍA: \n\tmlc_id-> ' + mlc_id + '\n\terr->' + err + '\n\tbody->' + body)
         if err
           res.send "Hay algo mal aquí!"
           return
@@ -136,7 +136,7 @@ module.exports = (robot) ->
         pbody = JSON.parse body
         robot.http("https://api.mercadolibre.com/categories/#{pbody[0].category_id}")
           .get() (err, response, body2) ->
-            robot.logger.info('CATEGORÍA: \n\tbody-> ' + body + '\n\terr->' + err + '\n\tstatusCode->' + response.statusCode + '\n\tbody2->' + body2)
+            robot.logger.info('CATEGORÍA: \n\tbody-> ' + body + '\n\terr->' + err + '\n\tbody2->' + body2)
             if err
               res.send "Hay algo mal aquí!"
               return
@@ -155,7 +155,7 @@ module.exports = (robot) ->
     robot.http("https://api.mercadolibre.com/sites/MLC/category_predictor/predict")
       .header('Content-Type', 'application/json')
       .post(data) (err, response, body) ->
-        robot.logger.info('DONDE METO: \n\tdata-> ' + data + '\n\terr->' + err + '\n\tstatusCode->' + response.statusCode + '\n\tbody->' + body)
+        robot.logger.info('DONDE METO: \n\tdata-> ' + data + '\n\terr->' + err + '\n\tbody->' + body)
         if err
           res.send "Hay algo mal aquí!"
           return
