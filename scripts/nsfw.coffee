@@ -34,7 +34,7 @@ module.exports = (robot) ->
 
   nsfw = (res) ->
     if(Math.random() > 0.1)
-      res.http('http://titsnarse.co.uk/random_json.php')
+      res.http('http://titsnarse.co.uk/random_json.php', timeout: 5000)
         .get() (error, response, body) ->
           if body == null
             cat(res)
@@ -43,7 +43,7 @@ module.exports = (robot) ->
     else
       tumblr.photos(res.random bizarres).random (post) ->
         console.log post.photos
-        if body == null
+        if post == null
           cat(res)
         else
           res.send res.random(bizarre_talk) + ' ' + post.photos[0].original_size.url
