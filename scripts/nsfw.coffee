@@ -36,14 +36,23 @@ module.exports = (robot) ->
     if(Math.random() > 0.1)
       res.http('http://titsnarse.co.uk/random_json.php')
         .get() (error, response, body) ->
-          res.send 'http://titsnarse.co.uk'+JSON.parse(body).src
+          if body == null
+            cat(res)
+          else
+            res.send 'http://titsnarse.co.uk'+JSON.parse(body).src
     else
       tumblr.photos(res.random bizarres).random (post) ->
         console.log post.photos
-        res.send res.random(bizarre_talk) + ' ' + post.photos[0].original_size.url
+        if body == null
+          cat(res)
+        else
+          res.send res.random(bizarre_talk) + ' ' + post.photos[0].original_size.url
   safe = (res) ->
     robot.logger.info('Trying to get NSFW from: [' + res.envelope.room + ']')
     res.send 'En Meloncargo trabajamos seguros'
+
+  cat = (res) ->
+    res.send 'No me responde el servidor. En su reemplazo disfruta un gatito :cat2: http://thecatapi.com/api/images/get?format=src'
 
   robot.hear /^sfw ?(.*)$/i, (res) ->
     param = res.match[1]
